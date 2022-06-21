@@ -122,7 +122,7 @@ function Inventory.SyncInventory(inv)
 		end
 	end
 
-	server.GetPlayerFromId(inv.id).syncInventory(inv.weight, inv.maxWeight, inv.items, money)
+	server.GetCharacterFromPlayerId(inv.id).syncInventory(inv.weight, inv.maxWeight, inv.items, money)
 end
 
 ---@param inv string | number
@@ -1500,7 +1500,15 @@ RegisterServerEvent('ox_inventory:updateWeapon', function(action, value, slot)
 end)
 
 lib.addCommand('group.admin', {'additem', 'giveitem'}, function(source, args)
+
 	args.item = Items(args.item)
+
+	args.target = server.GetPlayerIdFromCharacterId(args.target)
+
+	if not args.target then
+		return TriggerClientEvent('ox_inventory:notify', source, { text = 'Jogador não está online' })
+	end
+
 	if args.item and args.count > 0 then
 		Inventory.AddItem(args.target, args.item.name, args.count, args.metatype)
 		local inventory = Inventories[args.target]

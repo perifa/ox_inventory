@@ -49,26 +49,22 @@ if shared.framework == 'esx' then
 		black_money = 0,
 	}
 
-	function server.setPlayerData(player)
-		local groups = {
-			[player.job.name] = player.job.grade
-		}
-
+	function server.setPlayerData(character)
 		return {
-			source = player.source,
-			name = player.name,
-			groups = groups,
-			sex = player.sex or player.variables.sex,
-			dateofbirth = player.dateofbirth or player.variables.dateofbirth,
+			source = character.source,
+			name = character.name,
+			groups = character.roles,
+			sex = character.sex or character.variables.sex,
+			dateofbirth = character.dateofbirth or character.variables.dateofbirth
 		}
 	end
 
 	RegisterServerEvent('ox_inventory:requestPlayerInventory', function()
-		local source = source
-		local player = server.GetPlayerFromId(source)
+		local playerId = source
+		local character = server.GetCharacterFromPlayerId(playerId)
 
-		if player then
-			exports.ox_inventory:setPlayerInventory(player, player?.inventory)
+		if character then
+			exports.ox_inventory:setPlayerInventory(character, character?.inventory)
 		end
 	end)
 end

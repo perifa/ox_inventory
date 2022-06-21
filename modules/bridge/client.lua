@@ -71,7 +71,7 @@ elseif shared.framework == 'esx' then
 	RegisterNetEvent('esx:onPlayerLogout', onLogout)
 
 	AddEventHandler('esx:setPlayerData', function(key, value)
-		if PlayerData.loaded and GetInvokingResource() == 'es_extended' then
+		if PlayerData.loaded and GetInvokingResource() == 'core' then
 			if key == 'job' then
 				key = 'groups'
 				value = { [value.name] = value.grade }
