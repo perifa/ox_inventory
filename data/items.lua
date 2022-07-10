@@ -176,6 +176,16 @@ return {
 		allowArmed = true
 	},
 
+	['tracker'] = {
+		label = 'Rastreador',
+		weight = 1000,
+		stack = false,
+		consume = 0,
+		client = {
+			event = 'trackerModule.usedTrackerItem'
+		}
+	},
+
 	['armour'] = {
 		label = 'Bulletproof Vest',
 		weight = 3000,
