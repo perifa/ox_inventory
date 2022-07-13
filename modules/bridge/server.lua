@@ -32,14 +32,14 @@ if shared.framework == 'esx' then
 	local ESX
 
 	SetTimeout(500, function()
-		ESX = exports.es_extended:getSharedObject()
+		ESX = exports.core:getSharedObject()
 
 		if ESX.CreatePickup then
 			error('ox_inventory requires a ESX Legacy v1.6.0 or above, refer to the documentation.')
 		end
 
 		server.UseItem = ESX.UseItem
-		server.GetPlayerFromId = ESX.GetPlayerFromId
+		server.GetCharacterFromPlayerId = ESX.GetCharacterFromPlayerId
 		server.UsableItemsCallbacks = ESX.GetUsableItems()
 	end)
 

@@ -50,7 +50,7 @@ elseif shared.framework == 'esx' then
 	local ESX
 
 	SetTimeout(1000, function()
-		ESX = exports.es_extended:getSharedObject()
+		ESX = exports.core:getSharedObject()
 
 		ESX = {
 			SetPlayerData = ESX.SetPlayerData,

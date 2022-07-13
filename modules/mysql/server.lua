@@ -18,8 +18,8 @@ do
 		vehicleTable = 'vehicles'
 		vehicleColumn = 'id'
 	elseif shared.framework == 'esx' then
-		playerTable = 'users'
-		playerColumn = 'identifier'
+		playerTable = 'characters'
+		playerColumn = 'id'
 		vehicleTable = 'owned_vehicles'
 		vehicleColumn = 'plate'
 	end
