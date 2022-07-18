@@ -20,6 +20,8 @@ local function setPlayerInventory(player, data)
 	local totalWeight = 0
 
 	if data then
+		local ostime = os.time()
+
 		for _, v in pairs(data) do
 			if type(v) == 'number' then
 				return error(('Inventory for player.%s (%s) contains invalid data. Ensure you have converted inventories to the correct format.'):format(player.source, GetPlayerName(player.source)))
@@ -29,7 +31,7 @@ local function setPlayerInventory(player, data)
 
 			if item then
 				if v.metadata then
-					v.metadata = Items.CheckMetadata(v.metadata, item, v.name)
+					v.metadata = Items.CheckMetadata(v.metadata, item, v.name, ostime)
 				end
 
 				local weight = Inventory.SlotWeight(item, v)
@@ -106,8 +108,15 @@ lib.callback.register('ox_inventory:openInventory', function(source, inv, data)
 
 		elseif inv == 'dumpster' then
 			right = Inventory(data)
+
 			if not right then
-				right = Inventory.Create(data, shared.locale('dumpster'), inv, 15, 0, 100000, false)
+				local netid = tonumber(data:sub(9))
+
+				-- dumpsters do not work with entity lockdown. need to rewrite, but having to do
+				-- distance checks to some ~7000 dumpsters and freeze the entities isn't ideal
+				if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
+					right = Inventory.Create(data, shared.locale('dumpster'), inv, 15, 0, 100000, false)
+				end
 			end
 
 		elseif inv == 'container' then

@@ -172,8 +172,14 @@ function Items.Metadata(inv, item, metadata, count)
 		if not metadata.components then metadata.components = {} end
 
 		if metadata.registered ~= false and (metadata.ammo or item.name == 'WEAPON_STUNGUN') then
-			metadata.registered = type(metadata.registered) == 'string' and metadata.registered or inv.player.name
-			metadata.serial = GenerateSerial(metadata.serial)
+			local registered = type(metadata.registered) == 'string' and metadata.registered or inv?.player?.name
+
+			if registered then
+				metadata.registered = registered
+				metadata.serial = GenerateSerial(metadata.serial)
+			else
+				metadata.registered = nil
+			end
 		end
 
 		if item.hash == `WEAPON_PETROLCAN` or item.hash == `WEAPON_HAZARDCAN` or item.hash == `WEAPON_FIREEXTINGUISHER` then
@@ -214,15 +220,21 @@ function Items.Metadata(inv, item, metadata, count)
 	return metadata, count
 end
 
-function Items.CheckMetadata(metadata, item, name)
+function Items.CheckMetadata(metadata, item, name, ostime)
 	if metadata.bag then
 		metadata.container = metadata.bag
 		metadata.size = ItemList.containers[name]?.size or {5, 1000}
 		metadata.bag = nil
 	end
 
-	if metadata.durability and not item.durability and not item.degrade and not item.weapon then
-		metadata.durability = nil
+	local durability = metadata.durability
+
+	if durability then
+		if not item.durability and not item.degrade and not item.weapon then
+			metadata.durability = nil
+		elseif durability > 100 and ostime >= durability then
+			metadata.durability = 0
+		end
 	end
 
 	if metadata.components then
